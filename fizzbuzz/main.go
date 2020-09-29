@@ -7,12 +7,12 @@ import (
 )
 
 const (
-	FIZZ          ="fizz"
-	BUZZ          ="buzz"
-	MaxLowerBound =-1000
-	MaxUpperBound =1000
-	BASE          =10
-	BitSize       =64
+	fizz          ="fizz"
+	buzz          ="buzz"
+	maxLowerBound =-1000
+	maxUpperBound =1000
+	base          =10
+	bitSize       =64
 )
 
 func parseInputArgs() (int64, int64) {
@@ -24,11 +24,15 @@ func parseInputArgs() (int64, int64) {
 	lowerBound := os.Args[1]
 	upperBound := os.Args[2]
 
-	from, lowerBoundErr := strconv.ParseInt(lowerBound, BASE, BitSize)
-	to, upperBoundErr := strconv.ParseInt(upperBound, BASE, BitSize)
+	from, lowerBoundErr := strconv.ParseInt(lowerBound, base, bitSize)
+	if lowerBoundErr != nil {
+		fmt.Println("Usage: fizzbuzz [from - to] 1 15 from should be a valid integer")
+		os.Exit(1)
+	}
 
-	if lowerBoundErr != nil || upperBoundErr != nil {
-		fmt.Println("Usage: fizzbuzz [from - to] 1 15 from to should be a valid integers")
+	to, upperBoundErr := strconv.ParseInt(upperBound, base, bitSize)
+	if upperBoundErr != nil {
+		fmt.Println("Usage: fizzbuzz [from - to] 1 15 to to should be a valid integer")
 		os.Exit(1)
 	}
 
@@ -41,27 +45,35 @@ func checkInputArgs(from int64 ,to int64) {
 		os.Exit(1)
 	}
 
-	if from < MaxLowerBound {
-		fmt.Printf("Usage: fizzbuzz [from-to] 1 15 - from can not be lower than %d" , MaxLowerBound)
+	if from < maxLowerBound {
+		fmt.Printf("Usage: fizzbuzz [from-to] 1 15 - from can not be lower than %d" , maxLowerBound)
 		os.Exit(1)
 	}
 
-	if to > MaxUpperBound {
-		fmt.Printf("Usage: fizzbuzz [from-to] 1 15 - to can not be bigger than %d" , MaxUpperBound)
+	if to > maxUpperBound {
+		fmt.Printf("Usage: fizzbuzz [from-to] 1 15 - to can not be bigger than %d" , maxUpperBound)
 		os.Exit(1)
 	}
 }
 
+func isFizz(n int64) bool {
+	return n % 3 == 0
+}
+
+func isBuzz(n int64) bool {
+	return n % 5 == 0
+}
+
 func printFIZZBUZZNumber(n int64) {
-	if n % 3 == 0 {
-		fmt.Printf(FIZZ)
+	if isFizz(n) {
+		fmt.Printf(fizz)
 	}
 
-	if n % 5 == 0 {
-		fmt.Printf(BUZZ)
+	if isBuzz(n) {
+		fmt.Printf(buzz)
 	}
 
-	if n % 3 != 0 && n % 5 != 0 {
+	if !isFizz(n) && !isBuzz(n) {
 		fmt.Printf("%d", n)
 	}
 
